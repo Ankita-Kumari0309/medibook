@@ -24,7 +24,7 @@ const appointmentSchema = new mongoose.Schema(
       required: true,
     },
 
-    // 📝 Patient note (VERY IMPORTANT for dashboard)
+    // Patient note (VERY IMPORTANT for dashboard)
     note: {
       type: String,
       default: "",
@@ -44,7 +44,7 @@ const appointmentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// 🔥 INDEXING (important for performance)
+// INDEXING (important for performance)
 appointmentSchema.index({ doctorId: 1, date: 1 });
 appointmentSchema.index({ patientId: 1 });
 
