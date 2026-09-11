@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const slotSchema = new mongoose.Schema(
   {
     start: { type: String, default: "09:00" },
-    end:   { type: String, default: "17:00" },
+    end: { type: String, default: "17:00" },
   },
   { _id: false }
 );
@@ -11,7 +11,29 @@ const slotSchema = new mongoose.Schema(
 const daySchema = new mongoose.Schema(
   {
     enabled: { type: Boolean, default: false },
-    slots:   { type: [slotSchema], default: [{ start: "09:00", end: "17:00" }] },
+    slots: {
+      type: [slotSchema],
+      default: [{ start: "09:00", end: "17:00" }],
+    },
+  },
+  { _id: false }
+);
+
+// DATE-WISE AVAILABILITY
+const dateAvailabilitySchema = new mongoose.Schema(
+  {
+    date: {
+      type: String,
+      required: true,
+    },
+    enabled: {
+      type: Boolean,
+      default: false,
+    },
+    slots: {
+      type: [slotSchema],
+      default: [],
+    },
   },
   { _id: false }
 );
@@ -24,20 +46,37 @@ const availabilitySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+
+    // WEEKLY AVAILABILITY
     availability: {
-      monday:    { type: daySchema, default: () => ({}) },
-      tuesday:   { type: daySchema, default: () => ({}) },
+      monday: { type: daySchema, default: () => ({}) },
+      tuesday: { type: daySchema, default: () => ({}) },
       wednesday: { type: daySchema, default: () => ({}) },
-      thursday:  { type: daySchema, default: () => ({}) },
-      friday:    { type: daySchema, default: () => ({}) },
-      saturday:  { type: daySchema, default: () => ({}) },
-      sunday:    { type: daySchema, default: () => ({}) },
+      thursday: { type: daySchema, default: () => ({}) },
+      friday: { type: daySchema, default: () => ({}) },
+      saturday: { type: daySchema, default: () => ({}) },
+      sunday: { type: daySchema, default: () => ({}) },
     },
-    consultationDuration: { type: Number, default: 30 },
-    maxPatientsPerDay:    { type: Number, default: 20  },
+
+    // DATE-WISE AVAILABILITY
+    dateOverrides: {
+      type: [dateAvailabilitySchema],
+      default: [],
+    },
+
+    consultationDuration: {
+      type: Number,
+      default: 30,
+    },
+
+    maxPatientsPerDay: {
+      type: Number,
+      default: 20,
+    },
+
     breakTime: {
       start: { type: String, default: "13:00" },
-      end:   { type: String, default: "14:00" },
+      end: { type: String, default: "14:00" },
     },
   },
   { timestamps: true }

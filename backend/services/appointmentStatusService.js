@@ -52,6 +52,10 @@ const appointmentSchema = new mongoose.Schema(
   }
 );
 
+// ─────────────────────────────────────────────────────────────────────────────
+// INDEXES
+// ─────────────────────────────────────────────────────────────────────────────
+
 appointmentSchema.index({
   doctorId: 1,
   date: 1,
@@ -71,11 +75,7 @@ appointmentSchema.index({
   status: 1,
 });
 
-const Appointment =
-  mongoose.models.Appointment ||
-  mongoose.model(
-    "Appointment",
-    appointmentSchema
-  );
-
-export default Appointment;
+export default mongoose.model(
+  "Appointment",
+  appointmentSchema
+);

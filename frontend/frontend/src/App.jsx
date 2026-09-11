@@ -1,10 +1,12 @@
 // App.jsx
+
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import FutureVision from "./pages/FutureVision";
 
 import PatientDashboard from "./pages/dashboards/patientDashboard/PatientDashboard";
 import DoctorDashboard from "./pages/dashboards/doctorDashboard/DoctorDashboard";
@@ -16,10 +18,20 @@ import DoctorRegister from "./pages/auth/DoctorRegister";
 const ProtectedRoute = ({ children, allowedRole }) => {
   const { user, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <Navigate to="/login" />;
-  if (allowedRole && user.role !== allowedRole)
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (
+    allowedRole &&
+    user.role !== allowedRole
+  ) {
     return <Navigate to="/" />;
+  }
 
   return children;
 };
@@ -27,14 +39,47 @@ const ProtectedRoute = ({ children, allowedRole }) => {
 function App() {
   return (
     <Routes>
-      {/* Public */}
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/register/patient" element={<PatientRegister />} />
-      <Route path="/register/doctor" element={<DoctorRegister />} />
 
-      {/* Patient */}
+      {/* ───────────────────────────────────────────── */}
+      {/* PUBLIC ROUTES */}
+      {/* ───────────────────────────────────────────── */}
+
+      <Route
+        path="/"
+        element={<Home />}
+      />
+
+      <Route
+        path="/login"
+        element={<Login />}
+      />
+
+      <Route
+        path="/register"
+        element={<Register />}
+      />
+
+      <Route
+        path="/register/patient"
+        element={<PatientRegister />}
+      />
+
+      <Route
+        path="/register/doctor"
+        element={<DoctorRegister />}
+      />
+
+      {/* Future Vision - Public */}
+      <Route
+        path="/future-vision"
+        element={<FutureVision />}
+      />
+
+
+      {/* ───────────────────────────────────────────── */}
+      {/* PATIENT */}
+      {/* ───────────────────────────────────────────── */}
+
       <Route
         path="/patient/dashboard"
         element={
@@ -44,7 +89,11 @@ function App() {
         }
       />
 
-      {/* Doctor */}
+
+      {/* ───────────────────────────────────────────── */}
+      {/* DOCTOR */}
+      {/* ───────────────────────────────────────────── */}
+
       <Route
         path="/doctor/dashboard"
         element={
@@ -54,7 +103,11 @@ function App() {
         }
       />
 
-      
+
+      {/* ───────────────────────────────────────────── */}
+      {/* ADMIN */}
+      {/* ───────────────────────────────────────────── */}
+
       <Route
         path="/admin/*"
         element={
@@ -63,6 +116,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+
     </Routes>
   );
 }

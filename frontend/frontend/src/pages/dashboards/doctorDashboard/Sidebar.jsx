@@ -1,114 +1,333 @@
 import { useAuth } from "../../../context/AuthContext";
+
 import {
   MdDashboard,
-  MdMedicalServices,
-  MdPeople,
   MdEventNote,
+  MdPeople,
   MdPerson,
   MdLogout,
-  MdInsights,
+  MdLocalHospital,
 } from "react-icons/md";
 
-// ─── Navigation for Admin ───
+// ─────────────────────────────────────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────────────────────────────────────
+
 const navMain = [
-  { id: "overview", label: "Dashboard", icon: MdDashboard },
-  { id: "doctors", label: "Doctors", icon: MdMedicalServices },
-  { id: "patients", label: "Patients", icon: MdPeople },
-  { id: "appointments", label: "Appointments", icon: MdEventNote },
-  { id: "analytics", label: "Analytics", icon: MdInsights },
+  {
+    id: "overview",
+    label: "Dashboard",
+    icon: MdDashboard,
+  },
+  {
+    id: "appointments",
+    label: "Appointments",
+    icon: MdEventNote,
+  },
+  {
+    id: "patients",
+    label: "Patients",
+    icon: MdPeople,
+  },
+  {
+    id: "clinical",
+    label: "Clinical",
+    icon: MdLocalHospital,
+  },
 ];
 
 const navAccount = [
-  { id: "profile", label: "Profile", icon: MdPerson },
+  {
+    id: "profile",
+    label: "Profile",
+    icon: MdPerson,
+  },
 ];
 
-// ─── Section Label ───
+// ─────────────────────────────────────────────────────────────────────────────
+// THEME
+// ─────────────────────────────────────────────────────────────────────────────
+
+const THEME = {
+  bg: "linear-gradient(160deg, #082f49 0%, #0c4a6e 50%, #075985 100%)",
+
+  glow1: "rgba(56,189,248,0.13)",
+  glow2: "rgba(14,165,233,0.09)",
+
+  border: "rgba(255,255,255,0.07)",
+
+  labelColor: "rgba(186,230,253,0.45)",
+
+  activeNavBg: "rgba(56,189,248,0.16)",
+  activeNavBorder: "rgba(56,189,248,0.25)",
+  activeNavText: "#bae6fd",
+
+  activeBar: "#38bdf8",
+  activeDot: "#38bdf8",
+
+  hoverBg: "rgba(255,255,255,0.07)",
+
+  mutedText: "rgba(255,255,255,0.45)",
+
+  userCardBg: "rgba(255,255,255,0.07)",
+  userCardBorder: "rgba(255,255,255,0.10)",
+
+  userIconBg: "rgba(56,189,248,0.22)",
+  userIconBorder: "rgba(56,189,248,0.3)",
+  userIconText: "#7dd3fc",
+
+  onlineDot: "#34d399",
+  onlineBorder: "#0c4a6e",
+
+  roleMuted: "rgba(186,230,253,0.5)",
+
+  logoBg: "rgba(255,255,255,0.10)",
+  logoBorder: "rgba(255,255,255,0.15)",
+  logoStroke: "#38bdf8",
+
+  logoutHoverBg: "rgba(239,68,68,0.10)",
+  logoutHoverText: "#fca5a5",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION LABEL
+// ─────────────────────────────────────────────────────────────────────────────
+
 function SectionLabel({ label }) {
   return (
-    <div className="flex items-center gap-2 px-3 mb-2 mt-6">
-      <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200/60">
+    <div className="flex items-center gap-2 px-3 mb-1.5 mt-5">
+      <span
+        className="text-[9px] font-bold tracking-[0.14em] uppercase"
+        style={{
+          color: THEME.labelColor,
+        }}
+      >
         {label}
       </span>
-      <div className="flex-1 h-px bg-white/10" />
+
+      <div
+        className="flex-1 h-px"
+        style={{
+          background: THEME.border,
+        }}
+      />
     </div>
   );
 }
 
-// ─── Nav Item ───
-function NavItem({ item, active, onClick }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// NAV ITEM
+// ─────────────────────────────────────────────────────────────────────────────
+
+function NavItem({
+  item,
+  active,
+  onClick,
+  badge,
+}) {
   const Icon = item.icon;
 
   return (
     <button
-      onClick={() => onClick(item.id)}
-      className={`relative flex items-center gap-3 w-full px-4 py-2.5 rounded-xl text-sm font-medium text-left transition-all duration-200 group
-        ${
-          active
-            ? "bg-white/15 text-white shadow-inner"
-            : "text-white/60 hover:bg-white/10 hover:text-white"
-        }`}
+      type="button"
+      onClick={() =>
+        onClick(item.id)
+      }
+      className="relative flex items-center gap-2.5 w-full px-3 py-2.5 rounded-[10px] text-sm font-medium text-left transition-all duration-150 mb-0.5"
+      style={{
+        background: active
+          ? THEME.activeNavBg
+          : "transparent",
+
+        color: active
+          ? THEME.activeNavText
+          : THEME.mutedText,
+
+        border: active
+          ? `1px solid ${THEME.activeNavBorder}`
+          : "1px solid transparent",
+      }}
+      onMouseEnter={(e) => {
+        if (!active) {
+          e.currentTarget.style.background =
+            THEME.hoverBg;
+
+          e.currentTarget.style.color =
+            "#fff";
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!active) {
+          e.currentTarget.style.background =
+            "transparent";
+
+          e.currentTarget.style.color =
+            THEME.mutedText;
+        }
+      }}
     >
-      {/* Active bar */}
       {active && (
-        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-amber-300" />
+        <span
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] rounded-r-full"
+          style={{
+            background:
+              THEME.activeBar,
+          }}
+        />
       )}
 
-      {/* Icon */}
       <span
-        className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 flex-shrink-0
-          ${
-            active
-              ? "bg-white/20 text-white"
-              : "bg-transparent text-white/50 group-hover:bg-white/10 group-hover:text-white"
-          }`}
+        className="w-[30px] h-[30px] rounded-lg flex items-center justify-center flex-shrink-0 transition-all"
+        style={{
+          background: active
+            ? "rgba(56,189,248,0.18)"
+            : "transparent",
+        }}
       >
-        <Icon size={17} />
+        <Icon size={15} />
       </span>
 
-      <span className="truncate">{item.label}</span>
+      <span className="truncate">
+        {item.label}
+      </span>
 
-      {/* Active dot */}
-      {active && (
-        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-amber-300 flex-shrink-0" />
+      {badge != null && badge > 0 && (
+        <span
+          className="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+          style={{
+            background:
+              "rgba(251,191,36,0.2)",
+            color: "#fbbf24",
+          }}
+        >
+          {badge}
+        </span>
+      )}
+
+      {active && !badge && (
+        <span
+          className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0"
+          style={{
+            background:
+              THEME.activeDot,
+          }}
+        />
       )}
     </button>
   );
 }
 
-// ─── Sidebar ───
-export default function Sidebar({ activeSection, setActiveSection, onLogout }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN SIDEBAR
+// ─────────────────────────────────────────────────────────────────────────────
+
+export default function DoctorSidebar({
+  activeSection,
+  setActiveSection,
+  onLogout,
+}) {
   const { user } = useAuth();
 
-  const initials = user?.name
-    ? user.name
+  // ─────────────────────────────────────
+  // USER NAME
+  // ─────────────────────────────────────
+
+  const rawName =
+    user?.name || "";
+
+  // Correct regex:
+  // removes "Dr", "Dr.", "dr", "dr."
+  const cleanName =
+    rawName
+      .replace(
+        /^Dr\.?\s*/i,
+        ""
+      )
+      .trim();
+
+  const initials = cleanName
+    ? cleanName
         .split(" ")
-        .map((n) => n[0])
+        .map(
+          (name) => name[0]
+        )
         .join("")
         .slice(0, 2)
         .toUpperCase()
-    : "AD";
+    : "DR";
+
+  const displayName =
+    cleanName || "Doctor";
+
+  const fullDisplay =
+    `Dr. ${displayName}`;
 
   return (
     <aside
-      className="w-64 flex flex-col min-h-screen relative overflow-hidden"
+      className="
+        w-60
+        h-screen
+        flex
+        flex-col
+        flex-shrink-0
+        sticky
+        top-0
+        overflow-hidden
+      "
       style={{
-        background:
-          "linear-gradient(160deg, #0f766e 0%, #115e59 40%, #78350f 100%)",
+        background: THEME.bg,
       }}
     >
-      {/* Background blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full opacity-10 bg-white blur-2xl" />
-        <div className="absolute bottom-24 -right-12 w-40 h-40 rounded-full opacity-10 bg-amber-300 blur-2xl" />
-      </div>
+      {/* ─────────────────────────────────────
+          AMBIENT GLOWS
+      ───────────────────────────────────── */}
 
-      {/* Logo */}
-      <div className="relative px-5 pt-6 pb-5 flex items-center gap-3 border-b border-white/10">
-        <div className="bg-white rounded-xl p-2 shadow-md">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <div
+        className="absolute -top-14 -left-10 w-44 h-44 rounded-full pointer-events-none"
+        style={{
+          background: THEME.glow1,
+          filter: "blur(40px)",
+        }}
+      />
+
+      <div
+        className="absolute bottom-16 -right-8 w-36 h-36 rounded-full pointer-events-none"
+        style={{
+          background: THEME.glow2,
+          filter: "blur(36px)",
+        }}
+      />
+
+      {/* ─────────────────────────────────────
+          LOGO
+      ───────────────────────────────────── */}
+
+      <div
+        className="relative flex items-center gap-2.5 px-4 pt-5 pb-4 flex-shrink-0"
+        style={{
+          borderBottom: `1px solid ${THEME.border}`,
+        }}
+      >
+        <div
+          className="p-2 rounded-[10px]"
+          style={{
+            background:
+              THEME.logoBg,
+            border:
+              `1px solid ${THEME.logoBorder}`,
+          }}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
             <path
               d="M3 12h4l3-9 4 18 3-9h4"
-              stroke="#0f766e"
+              stroke={
+                THEME.logoStroke
+              }
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -117,78 +336,161 @@ export default function Sidebar({ activeSection, setActiveSection, onLogout }) {
         </div>
 
         <div>
-          <div className="text-white font-bold text-lg tracking-wide">
+          <div className="text-white font-semibold text-[15px] tracking-[0.01em]">
             MediBook
           </div>
-          <div className="text-amber-200/70 text-[11px] uppercase tracking-wider">
-            Admin Panel
+
+          <div
+            className="text-[10px] uppercase tracking-[0.12em] mt-0.5"
+            style={{
+              color:
+                THEME.roleMuted,
+            }}
+          >
+            Doctor Portal
           </div>
         </div>
       </div>
 
-      {/* User Card */}
-      <div className="relative mx-3 mt-4 rounded-2xl overflow-hidden">
+      {/* ─────────────────────────────────────
+          USER CARD
+      ───────────────────────────────────── */}
+
+      <div
+        className="relative mx-2.5 mt-3 flex items-center gap-2.5 px-3 py-2.5 rounded-xl flex-shrink-0"
+        style={{
+          background:
+            THEME.userCardBg,
+          border:
+            `1px solid ${THEME.userCardBorder}`,
+        }}
+      >
         <div
-          className="flex items-center gap-3 px-4 py-3.5"
+          className="relative w-9 h-9 rounded-[9px] flex items-center justify-center font-semibold text-xs flex-shrink-0"
           style={{
-            background: "rgba(255,255,255,0.10)",
-            backdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.15)",
-            borderRadius: "16px",
+            background:
+              THEME.userIconBg,
+            border:
+              `1px solid ${THEME.userIconBorder}`,
+            color:
+              THEME.userIconText,
           }}
         >
-          <div className="relative flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-lg bg-white/20 text-white">
-            {initials}
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-teal-700" />
+          {initials}
+
+          <span
+            className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2"
+            style={{
+              background:
+                THEME.onlineDot,
+              borderColor:
+                THEME.onlineBorder,
+            }}
+          />
+        </div>
+
+        <div className="min-w-0">
+          <div className="text-white text-[13px] font-semibold truncate">
+            {fullDisplay}
           </div>
 
-          <div className="flex flex-col min-w-0">
-            <span className="text-white text-sm font-semibold truncate">
-              {user?.name || "Admin"}
-            </span>
-            <span className="text-amber-200/70 text-xs capitalize">
-              {user?.role || "admin"}
-            </span>
+          <div
+            className="text-[11px] mt-0.5 truncate"
+            style={{
+              color:
+                THEME.roleMuted,
+            }}
+          >
+            {user?.speciality ||
+              "Doctor"}
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
-      <div className="relative flex-1 overflow-y-auto mt-2 px-2 pb-2">
+      {/* ─────────────────────────────────────
+          NAVIGATION
+          Only this area scrolls.
+      ───────────────────────────────────── */}
+
+      <div className="relative flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-2 pb-2">
         <SectionLabel label="Main" />
-        <div className="flex flex-col gap-0.5">
-          {navMain.map((item) => (
+
+        {navMain.map(
+          (item) => (
             <NavItem
               key={item.id}
               item={item}
-              active={activeSection === item.id}
-              onClick={setActiveSection}
+              active={
+                activeSection ===
+                item.id
+              }
+              onClick={
+                setActiveSection
+              }
             />
-          ))}
-        </div>
+          )
+        )}
 
         <SectionLabel label="Account" />
-        <div className="flex flex-col gap-0.5">
-          {navAccount.map((item) => (
+
+        {navAccount.map(
+          (item) => (
             <NavItem
               key={item.id}
               item={item}
-              active={activeSection === item.id}
-              onClick={setActiveSection}
+              active={
+                activeSection ===
+                item.id
+              }
+              onClick={
+                setActiveSection
+              }
             />
-          ))}
-        </div>
+          )
+        )}
       </div>
 
-      {/* Logout */}
-      <div className="relative px-3 py-4 border-t border-white/10">
+      {/* ─────────────────────────────────────
+          LOGOUT
+      ───────────────────────────────────── */}
+
+      <div
+        className="relative px-2 py-3 flex-shrink-0"
+        style={{
+          borderTop:
+            `1px solid ${THEME.border}`,
+        }}
+      >
         <button
+          type="button"
           onClick={onLogout}
-          className="flex items-center gap-3 w-full px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 group"
+          className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-[10px] text-sm font-medium transition-all duration-150"
+          style={{
+            background:
+              "transparent",
+            border: "none",
+            color:
+              THEME.mutedText,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              THEME.logoutHoverBg;
+
+            e.currentTarget.style.color =
+              THEME.logoutHoverText;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              "transparent";
+
+            e.currentTarget.style.color =
+              THEME.mutedText;
+          }}
         >
-          <span className="flex items-center justify-center w-8 h-8 rounded-lg group-hover:bg-red-500/15">
-            <MdLogout size={17} />
+          <span className="w-[30px] h-[30px] rounded-lg flex items-center justify-center flex-shrink-0">
+            <MdLogout size={15} />
           </span>
+
           Logout
         </button>
       </div>

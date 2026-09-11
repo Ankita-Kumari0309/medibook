@@ -51,9 +51,9 @@ export const getAdminOverview = async (req, res) => {
 
     // UPDATED: Pending approvals
     const pendingApprovals = await User.find({ role: "doctor", status: "pending" })
-      .select("name email speciality experience fees createdAt")
-      .sort({ createdAt: -1 })
-      .limit(5);
+    .select("name email doctorId speciality experience fees createdAt")
+    .sort({ createdAt: -1 })
+    .limit(5);
 
     res.json({
       stats: {

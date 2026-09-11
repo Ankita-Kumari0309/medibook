@@ -383,12 +383,21 @@ export default function AdminOverview({ setActiveSection }) {
                       style={{ background: `linear-gradient(135deg,${g1},${g2})` }}>
                       {getInitials(doc.name)}
                     </div>
+
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-slate-800 truncate">{doc.name}</div>
+                      <div className="text-sm font-semibold text-slate-800 truncate">
+                        {doc.name}
+                      </div>
+
                       <div className="text-xs text-amber-600 font-medium mt-0.5 truncate">
+                        Doctor ID: {doc.doctorId || "—"}
+                      </div>
+
+                      <div className="text-xs text-slate-500 mt-0.5 truncate">
                         {doc.speciality || "—"}{doc.experience ? ` · ${doc.experience} yrs` : ""}
                       </div>
                     </div>
+
                     <button
                       onClick={() => handleApprove(doc._id)}
                       className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-bold text-white flex-shrink-0 transition-opacity hover:opacity-80"

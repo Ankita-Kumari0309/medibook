@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
   emergency:  { type: String },
 
   experience: { type: Number },
+  doctorId: {
+    type: String,
+    trim: true,
+  },
+
 
   // NEW STATUS FIELD (MAIN CHANGE)
   status: {

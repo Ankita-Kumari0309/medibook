@@ -1,5 +1,7 @@
 import express from "express";
+
 import verifyToken from "../middleware/verifyToken.js";
+import checkRole from "../middleware/checkrole.js";
 
 import {
   bookAppointment,
@@ -13,36 +15,68 @@ import {
 
 const router = express.Router();
 
-
+// ─────────────────────────────────────────────────────────────────────────────
 // PATIENT ROUTES
-
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Book appointment
-router.post("/", verifyToken, bookAppointment);
+router.post(
+  "/",
+  verifyToken,
+  checkRole("patient"),
+  bookAppointment
+);
 
 // Get my appointments
-router.get("/my", verifyToken, getMyAppointments);
+router.get(
+  "/my",
+  verifyToken,
+  checkRole("patient"),
+  getMyAppointments
+);
 
 // Cancel appointment
-router.put("/cancel/:id", verifyToken, cancelAppointment);
+router.put(
+  "/cancel/:id",
+  verifyToken,
+  checkRole("patient"),
+  cancelAppointment
+);
 
 // Get my doctors
-router.get("/doctors", verifyToken, getMyDoctors);
+router.get(
+  "/doctors",
+  verifyToken,
+  checkRole("patient"),
+  getMyDoctors
+);
 
-// NEW → Get available slots for booking
-// Example: /api/appointments/slots?doctorId=123&date=2026-04-10
-router.get("/slots", verifyToken, getAvailableSlots);
+// Get available slots
+router.get(
+  "/slots",
+  verifyToken,
+  checkRole("patient"),
+  getAvailableSlots
+);
 
-
-
-// 👨‍⚕️ DOCTOR ROUTES
-
+// ─────────────────────────────────────────────────────────────────────────────
+// DOCTOR ROUTES
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Accept / Reject appointment
-router.put("/:id/status", verifyToken, updateAppointmentStatus);
+router.put(
+  "/:id/status",
+  verifyToken,
+  checkRole("doctor"),
+  updateAppointmentStatus
+);
 
 // Mark appointment as completed
-router.put("/:id/complete", verifyToken, markAsCompleted);
-
+router.put(
+  "/:id/complete",
+  verifyToken,
+  checkRole("doctor"),
+  markAsCompleted
+);
 
 export default router;

@@ -20,9 +20,10 @@ export const register = async (req, res) => {
       password,
       role,
       phone,
+      doctorId,
       speciality,
       fees,
-      experience, 
+      experience,
     } = req.body;
 
     const existing = await User.findOne({ email });
@@ -41,14 +42,14 @@ export const register = async (req, res) => {
       role: safeRole,
       phone,
 
+      doctorId: safeRole === "doctor" ? doctorId : undefined,
       speciality: safeRole === "doctor" ? speciality : undefined,
       fees: safeRole === "doctor" ? fees : undefined,
       experience: safeRole === "doctor" ? Number(experience) : undefined,
 
-      // NEW STATUS SYSTEM
+      // Doctor accounts require admin approval
       status: safeRole === "doctor" ? "pending" : "approved",
 
-    
       isApproved: safeRole === "doctor" ? false : true,
     });
 
@@ -60,6 +61,7 @@ export const register = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // LOGIN
 
@@ -77,12 +79,12 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Wrong password" });
     }
 
-  // BLOCKED USER CHECK (ADD HERE)
-  if (!user.isActive) {
-    return res.status(403).json({ message: "Account is blocked by admin" });
-  }
+    // BLOCKED USER CHECK
+    if (!user.isActive) {
+      return res.status(403).json({ message: "Account is blocked by admin" });
+    }
 
-    // UPDATED APPROVAL CHECK
+    // DOCTOR APPROVAL CHECK
     if (user.role === "doctor" && user.status !== "approved") {
       return res.status(403).json({
         message: "Account pending admin approval",
@@ -99,7 +101,9 @@ export const login = async (req, res) => {
   }
 };
 
+
 // GET PROFILE
+
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -108,6 +112,7 @@ export const getMe = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // UPDATE PROFILE
 

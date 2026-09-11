@@ -1,21 +1,94 @@
 import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// Storage config
+// ─────────────────────────────────────────────────────────────────────────────
+// Resolve backend directory reliably
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const uploadsDir = path.resolve(
+  __dirname,
+  "..",
+  "uploads"
+);
+
+// Make sure uploads folder exists
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, {
+    recursive: true,
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STORAGE
+// ─────────────────────────────────────────────────────────────────────────────
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
+
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + "-" + file.originalname;
+    const originalName =
+      path
+        .basename(file.originalname)
+        .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+    const uniqueName =
+      `${Date.now()}-${originalName}`;
+
     cb(null, uniqueName);
-  }
+  },
 });
 
-// File filter: allow PDF + images only
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
-  if (allowedTypes.includes(file.mimetype)) cb(null, true);
-  else cb(new Error("Only PDF, JPG, PNG files are allowed"), false);
+// ─────────────────────────────────────────────────────────────────────────────
+// FILE FILTER
+// ─────────────────────────────────────────────────────────────────────────────
+
+const fileFilter = (
+  req,
+  file,
+  cb
+) => {
+  const allowedTypes = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+  ];
+
+  if (
+    allowedTypes.includes(
+      file.mimetype
+    )
+  ) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "Only PDF, JPG, PNG files are allowed"
+      ),
+      false
+    );
+  }
 };
 
-const upload = multer({ storage, fileFilter });
+// ─────────────────────────────────────────────────────────────────────────────
+// MULTER
+// ─────────────────────────────────────────────────────────────────────────────
+
+const upload = multer({
+  storage,
+  fileFilter,
+
+  limits: {
+    fileSize:
+      10 * 1024 * 1024, // 10 MB
+  },
+});
 
 export default upload;
