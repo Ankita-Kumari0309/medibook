@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 
 import verifyToken from "../middleware/verifyToken.js";
-import checkRole from "../middleware/checkrole.js";
+import checkRole from "../middleware/checkRole.js";
 
 import {
   getCareRecommendation,
