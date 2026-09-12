@@ -351,26 +351,7 @@ function HeaderBanner({
             )}
           </div>
 
-          {/* Status pill */}
-
-          <div className="flex items-center gap-2 mt-3">
-            <span
-              className="text-[11px] font-bold px-3 py-1 rounded-full"
-              style={{
-                background: isApproved
-                  ? "rgba(34,197,94,0.2)"
-                  : "rgba(234,179,8,0.2)",
-                color: isApproved
-                  ? "#86efac"
-                  : "#fde047",
-              }}
-            >
-              {isApproved
-                ? "Approved"
-                : "Pending Approval"}
-            </span>
-          </div>
-        </div>
+         
 
         {/* Right */}
 
