@@ -11,8 +11,6 @@ import {
   MdPending,
   MdSchedule,
   MdNotifications,
-  MdVerified,
-  MdTrendingUp,
 } from "react-icons/md";
 
 import { useAuth } from "../../../context/AuthContext";
@@ -131,13 +129,10 @@ function formatTime(t) {
 function formatDate(d) {
   if (!d) return "";
 
-  return new Date(d).toLocaleDateString(
-    "en-IN",
-    {
-      day: "numeric",
-      month: "short",
-    }
-  );
+  return new Date(d).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+  });
 }
 
 // ─── Skeleton ──────────────────────────────────────────────────────────────────
@@ -169,10 +164,7 @@ function StatsSkeleton() {
 
 // ─── Error Banner ──────────────────────────────────────────────────────────────
 
-function ErrorBanner({
-  message,
-  onRetry,
-}) {
+function ErrorBanner({ message, onRetry }) {
   return (
     <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
       <MdErrorOutline
@@ -263,14 +255,10 @@ function HeaderBanner({
     dashData?.doctor?.speciality ||
     "Specialist";
 
-  const isApproved =
-    dashData?.doctor?.isApproved;
-
   // FIX: Prevent "Dr. Dr."
-  const cleanName =
-    displayName
-      .replace(/^Dr\.?\s*/i, "")
-      .trim();
+  const cleanName = displayName
+    .replace(/^Dr\.?\s*/i, "")
+    .trim();
 
   const firstName =
     "Dr. " +
@@ -322,15 +310,6 @@ function HeaderBanner({
             <h1 className="text-white text-2xl font-bold tracking-tight">
               {firstName}
             </h1>
-
-            {isApproved && (
-              <MdVerified
-                size={20}
-                style={{
-                  color: "#38bdf8",
-                }}
-              />
-            )}
           </div>
 
           <div className="flex items-center gap-2 mt-1.5 flex-wrap">
@@ -350,8 +329,7 @@ function HeaderBanner({
               </>
             )}
           </div>
-
-         
+        </div>
 
         {/* Right */}
 
@@ -652,7 +630,7 @@ export default function DoctorOverview({
   const [errorDash, setErrorDash] =
     useState("");
 
-  // Only added for appointment request actions
+  // Appointment request actions
   const [updatingId, setUpdatingId] =
     useState(null);
 
@@ -796,23 +774,29 @@ export default function DoctorOverview({
         />
       ) : (
         <div className="grid grid-cols-4 gap-4">
-          {STAT_META.map((meta) => (
-            <StatCard
-              key={meta.key}
-              label={meta.label}
-              value={
-                stats[meta.key] ?? 0
-              }
-              deltaLabel={
-                meta.deltaLabel
-              }
-              icon={meta.icon}
-              gradient={meta.gradient}
-              light={meta.light}
-              accent={meta.accent}
-              ring={meta.ring}
-            />
-          ))}
+          {STAT_META.map(
+            (meta) => (
+              <StatCard
+                key={meta.key}
+                label={meta.label}
+                value={
+                  stats[meta.key] ?? 0
+                }
+                deltaLabel={
+                  meta.deltaLabel
+                }
+                icon={meta.icon}
+                gradient={
+                  meta.gradient
+                }
+                light={meta.light}
+                accent={
+                  meta.accent
+                }
+                ring={meta.ring}
+              />
+            )
+          )}
         </div>
       )}
 
@@ -901,7 +885,6 @@ export default function DoctorOverview({
 
                     <div className="flex-1 space-y-1.5">
                       <Skeleton className="h-3 w-3/4" />
-
                       <Skeleton className="h-2.5 w-1/2" />
                     </div>
                   </div>
@@ -959,7 +942,7 @@ export default function DoctorOverview({
             actionLabel="Manage"
           />
 
-          {/* Only added for action errors */}
+          {/* Action error */}
 
           {actionError && (
             <div className="mb-3 px-3 py-2 rounded-lg bg-red-50 border border-red-100 text-xs text-red-600">
@@ -979,7 +962,6 @@ export default function DoctorOverview({
 
                     <div className="flex-1 space-y-1.5">
                       <Skeleton className="h-3 w-3/4" />
-
                       <Skeleton className="h-2.5 w-1/2" />
                     </div>
                   </div>
@@ -1031,8 +1013,10 @@ export default function DoctorOverview({
               <div className="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
                 <div className="text-center">
                   <div className="text-lg font-bold text-gray-800">
-                    {stats.totalAppointments ??
-                      0}
+                    {
+                      stats.totalAppointments ??
+                      0
+                    }
                   </div>
 
                   <div className="text-[10px] text-gray-400 font-medium">
@@ -1044,8 +1028,10 @@ export default function DoctorOverview({
 
                 <div className="text-center">
                   <div className="text-lg font-bold text-blue-600">
-                    {stats.totalPatients ??
-                      0}
+                    {
+                      stats.totalPatients ??
+                      0
+                    }
                   </div>
 
                   <div className="text-[10px] text-gray-400 font-medium">
@@ -1057,8 +1043,10 @@ export default function DoctorOverview({
 
                 <div className="text-center">
                   <div className="text-lg font-bold text-teal-600">
-                    {stats.completedToday ??
-                      0}
+                    {
+                      stats.completedToday ??
+                      0
+                    }
                   </div>
 
                   <div className="text-[10px] text-gray-400 font-medium">
